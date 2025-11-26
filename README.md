@@ -34,7 +34,7 @@ npm test
 npm run test:coverage
 
 ## Deployment Notes
-- Backend deployed on Render
+- Backend deployed on Render https://eterna-labs-backend-69zf.onrender.com/
 - WebSockets enabled via Render services
-- GitHub repo connected for CI/CD
+- GitHub repo connected for CI/CD https://github.com/srijan008/Eterna-Labs_backend
 
