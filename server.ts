@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import websocket from '@fastify/websocket';
 
 import { prisma } from './src/db/prisma';
-import { initOrderQueue } from './queue/orderQueue';
+import { initOrderQueue } from './src/queue/orderQueue';
 import orderRoutes from './src/routes/orderRoutes.js';
 import { registerOrderWebSocket } from './src/ws/order.ws';
 import { getActiveOrderState } from './src/services/activeOrderState';
