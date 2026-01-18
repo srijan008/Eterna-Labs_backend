@@ -15,7 +15,7 @@ export function registerOrderWebSocket(fastify: FastifyInstance) {
     }
 
     const socketId = crypto.randomUUID();
-    const socket = connection; // ✅ THIS IS THE SOCKET
+    const socket = connection;
     const redisKey = `ws:order:${orderId}`;
 
     socketRegistry.set(socketId, socket);

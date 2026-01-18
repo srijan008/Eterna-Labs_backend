@@ -33,7 +33,7 @@ export class MockDexRouter {
   ) {
     await sleep(2000);
 
-    // Execution price deviates slightly from quoted price
+    
     const executionDrift = 1 + (Math.random() * 2 - 1) * slippageTolerance * 0.5;
     const executedPrice = quotedPrice * executionDrift;
 

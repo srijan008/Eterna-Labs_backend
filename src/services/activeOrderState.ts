@@ -32,9 +32,7 @@ export async function setActiveOrderState(
   await redis.sadd('active:orders', orderId);
 }
 
-/**
- * Get active order state
- */
+
 export async function getActiveOrderState(
   orderId: string
 ): Promise<ActiveOrderState | null> {
@@ -42,10 +40,6 @@ export async function getActiveOrderState(
   return raw ? JSON.parse(raw) : null;
 }
 
-/**
- * Remove order from active tracking
- * Call when order is confirmed or failed
- */
 export async function clearActiveOrder(orderId: string) {
   await redis.del(key(orderId));
   await redis.srem('active:orders', orderId);

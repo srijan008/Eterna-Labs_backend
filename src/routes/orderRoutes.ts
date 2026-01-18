@@ -20,7 +20,7 @@ export default async function orderRoutes(fastify: FastifyInstance) {
       const body = request.body as ExecuteOrderBody;
       const { tokenIn, tokenOut, amount, orderType = 'market' } = body;
 
-      /* ------------------ Validation ------------------ */
+      
       if (!tokenIn || !tokenOut || amount == null) {
         return reply.code(400).send({
           error: 'tokenIn, tokenOut and amount are required'
@@ -45,7 +45,7 @@ export default async function orderRoutes(fastify: FastifyInstance) {
         });
       }
 
-      /* ------------------ Idempotency ------------------ */
+      
       const idempotencyKey =
         request.headers['idempotency-key'] as string | undefined;
 
@@ -64,7 +64,7 @@ export default async function orderRoutes(fastify: FastifyInstance) {
 
       
       const orderId = crypto.randomUUID();
-      // fastify.log.info('BEFORE prisma.create');
+      fastify.log.info('BEFORE prisma.create');
       await prisma.order.create({
         data: {
           id: orderId,

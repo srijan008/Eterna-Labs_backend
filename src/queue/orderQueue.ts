@@ -16,13 +16,13 @@ export const orderQueue = new Queue(ORDER_QUEUE_NAME, {
 });
 
 export async function initOrderQueue() {
-  console.log('Initializing order queue...');
+  // console.log('Initializing order queue...');
   await orderQueue.waitUntilReady();
-  console.log('✅ Order queue initialized');
+  console.log('Order queue initialized');
 }
 
 export async function enqueueOrder(orderId: string) {
-  console.log('ENQUEUE ORDER CALLED', orderId);
+  // console.log('ENQUEUE ORDER CALLED', orderId);
   await orderQueue.add('execute-order', { orderId });
   console.log('Order enqueued:', orderId);
 }

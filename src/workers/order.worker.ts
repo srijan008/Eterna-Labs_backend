@@ -16,10 +16,10 @@ export const orderWorker = new Worker(
   async (job) => {
     const { orderId } = job.data;
   await new Promise(res => setTimeout(res, 20000));
-    logger.info({ orderId }, 'Processing order');
+    // logger.info({ orderId }, 'Processing order');
 
     try {
-      // ---- PENDING → ROUTING ----
+      
       await prisma.order.update({
         where: { id: orderId },
         data: { status: 'routing' }
@@ -27,7 +27,7 @@ export const orderWorker = new Worker(
 
       await broadcastOrderUpdate(orderId, { status: 'routing' });
 
-      // ---- FETCH QUOTES ----
+      
       const [raydium, meteora] = await Promise.all([
         router.getRaydiumQuote(1),
         router.getMeteoraQuote(1)
@@ -36,8 +36,7 @@ export const orderWorker = new Worker(
       const best =
         raydium.price > meteora.price ? raydium : meteora;
 
-            // ---- ROUTING DECISION ----
-            // ---- ROUTING DECISION ----
+            
         await prisma.order.update({
         where: { id: orderId },
         data: {
@@ -50,27 +49,24 @@ export const orderWorker = new Worker(
         status: 'building',
         data: { chosenDex: best.dex }
         });
-        logger.info({ orderId, bestDex: best.dex }, 'Best DEX selected');
+        // logger.info({ orderId, bestDex: best.dex }, 'Best DEX selected');
 
-        // ---- BUILDING TRANSACTION ----
-
-        // ---- SUBMITTED ----
+        
         await prisma.order.update({
         where: { id: orderId },
         data: { status: 'submitted' }
         });
-        logger.info({ orderId }, 'Order submitted for execution');
-
+        // logger.info({ orderId }, 'Order submitted for execution');
         await broadcastOrderUpdate(orderId, {
         status: 'submitted'
         });
-        logger.info({ orderId }, 'Broadcasted submitted status');
+        // logger.info({ orderId }, 'Broadcasted submitted status');
 
-        // ---- EXECUTION ----
+        
         const result = await router.executeSwap(
-        best.dex,
-        best.price,
-        0.01 // 1% slippage tolerance
+          best.dex,
+          best.price,
+          0.01 // 1% slippage tolerance
         );
 
 
@@ -92,7 +88,7 @@ export const orderWorker = new Worker(
         }
       });
     } catch (err: any) {
-      // ---- FAILURE ----
+      
       await prisma.order.update({
         where: { id: orderId },
         data: {
@@ -106,7 +102,7 @@ export const orderWorker = new Worker(
         data: { error: err.message }
       });
 
-      throw err; // let BullMQ handle retries
+      throw err; 
     }
   },
   {
@@ -117,7 +113,7 @@ export const orderWorker = new Worker(
 
 orderWorker.on('failed', (job, err) => {
   console.error(
-    `❌ Order ${job?.data?.orderId} failed after retries`,
+    `Order ${job?.data?.orderId} failed after retries`,
     err.message
   );
 });
