@@ -1,9 +1,9 @@
-# 🚀 Order Execution Engine (Backend Task 2)
+# 🚀 Order Execution Engine
 
 ## 🌐 Live Deployment
 
 - **Base URL:**  
-  https://eterna-labs-backend.vercel.app/
+  https://eterna-labs-backend-1.onrender.com
 
 - **Order Execution API (POST):**  
   https://eterna-labs-backend-1.onrender.com/api/orders/execute
@@ -74,20 +74,17 @@ Response
 }
 
 🔌 WebSocket Connection
-```
+
 
 Connect using the returned orderId:
 
 wss://eterna-labs-backend-1.onrender.com/ws?orderId=<ORDER_ID>
-
+```
 Order Lifecycle Events
 
 pending
-
 routing
-
 building
-
 submitted
 
 confirmed (includes txHash & executionPrice)
@@ -97,65 +94,40 @@ failed (includes error reason)
 Multiple clients can subscribe to the same order.
 
 🔀 DEX Routing
-
 Quotes fetched from Raydium and Meteora
-
 Best execution price selected automatically
-
 Routing decisions logged for transparency
 
 🛡️ Slippage Protection
-
 Execution price drift is simulated
-
 If slippage exceeds tolerance, order fails with:
-
 SLIPPAGE_EXCEEDED
-
 ⚙️ Queue & Concurrency
-
 BullMQ + Redis
-
 Concurrency: 10
-
 Handles high request volume
-
 Exponential backoff retries (max 3 attempts)
 
 🔗 WebSocket Architecture
-
 Socket IDs mapped to orderId in Redis
-
 Status updates broadcast to all subscribed sockets
-
 Automatic cleanup on socket disconnect
 
 🧪 Testing
-
 Includes 10+ unit and integration tests covering:
-
 DEX routing logic
-
 Slippage handling
-
 Queue behavior and retries
-
 API validation
-
 WebSocket lifecycle
 
 Run tests:
-
 npm test
 
 🛠 Tech Stack
-
 Node.js + TypeScript
-
 Fastify (HTTP + WebSocket)
-
 BullMQ + Redis
-
 PostgreSQL + Prisma
 
 Vitest
@@ -167,37 +139,19 @@ npx prisma migrate dev
 npm run dev
 
 🎥 Demo
-
-The demo video shows:
+The demo video shows: https://youtu.be/RMlMbygVPVk
 
 Multiple simultaneous orders
-
 Live WebSocket updates
-
 DEX routing decisions
-
 Queue concurrency handling
 
 📌 Summary
 
 This project demonstrates a production-grade backend architecture with:
-
 Real-time order execution
-
 Concurrent job processing
-
 Robust error handling
-
 Scalable WebSocket design
-
 Mock execution is used to emphasize system design, with a clear path to real Solana devnet execution.
 
-
----
-
-If you want, I can also:
-- Make this **shorter for recruiters**
-- Add an **architecture diagram**
-- Add a **Real Devnet (Option A) section**
-
-Just say the word.
