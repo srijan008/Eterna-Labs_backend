@@ -74,6 +74,7 @@ Response
 }
 
 🔌 WebSocket Connection
+```
 
 Connect using the returned orderId:
 
