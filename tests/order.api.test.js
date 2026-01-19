@@ -1,69 +1,43 @@
-// import request from 'supertest';
-// import { buildServerExport } from '../server.ts';
+import { describe, test, expect, beforeAll, afterAll } from 'vitest';
+import supertest from 'supertest';
+import { buildServer } from '../server.ts';
 
-// let app;
-  
-// beforeAll(async () => {
-//   app = await buildServerExport();
-// });
+let app;
+let request;
 
-// test('creates market order successfully', async () => {
-//   const res = await request(app.server)
-//     .post('/api/orders/execute')
-//     .send({
-//       tokenIn: 'SOL',
-//       tokenOut: 'USDC',
-//       amount: 10
-//     });
+beforeAll(async () => {
+  app = await buildServer();
+  await app.listen({ port: 0 });
+  request = supertest(app.server);
+});
 
-//   expect(res.status).toBe(202);
-//   expect(res.body.orderId).toBeDefined();
-// });
+afterAll(async () => {
+  await app.close();
+});
 
-// test('rejects invalid amount', async () => {
-//   const res = await request(app.server)
-//     .post('/api/orders/execute')
-//     .send({
-//       tokenIn: 'SOL',
-//       tokenOut: 'USDC',
-//       amount: -1
-//     });
+describe('Order API', () => {
+  test('creates market order', async () => {
+    const res = await request
+      .post('/api/orders/execute')
+      .send({
+        tokenIn: 'SOL',
+        tokenOut: 'USDC',
+        amount: 1
+      });
 
-//   expect(res.status).toBe(400);
-// });
+    expect(res.status).toBe(202);
+    expect(res.body.orderId).toBeDefined();
+  });
 
-// test('rejects same token swap', async () => {
-//   const res = await request(app.server)
-//     .post('/api/orders/execute')
-//     .send({
-//       tokenIn: 'SOL',
-//       tokenOut: 'SOL',
-//       amount: 5
-//     });
+  test('rejects invalid order', async () => {
+    const res = await request
+      .post('/api/orders/execute')
+      .send({
+        tokenIn: 'SOL',
+        tokenOut: 'SOL',
+        amount: 1
+      });
 
-//   expect(res.status).toBe(400);
-// });
-
-// test('idempotency returns same orderId', async () => {
-//   const key = 'test-idempotency-key';
-
-//   const r1 = await request(app.server)
-//     .post('/api/orders/execute')
-//     .set('Idempotency-Key', key)
-//     .send({
-//       tokenIn: 'SOL',
-//       tokenOut: 'USDC',
-//       amount: 1
-//     });
-
-//   const r2 = await request(app.server)
-//     .post('/api/orders/execute')
-//     .set('Idempotency-Key', key)
-//     .send({
-//       tokenIn: 'SOL',
-//       tokenOut: 'USDC',
-//       amount: 1
-//     });
-
-//   expect(r1.body.orderId).toBe(r2.body.orderId);
-// });
+    expect(res.status).toBe(400);
+  });
+});

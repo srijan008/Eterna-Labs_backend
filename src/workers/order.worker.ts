@@ -56,11 +56,11 @@ export const orderWorker = new Worker(
         where: { id: orderId },
         data: { status: 'submitted' }
         });
-        // logger.info({ orderId }, 'Order submitted for execution');
+        logger.info({ orderId }, 'Order submitted for execution');
         await broadcastOrderUpdate(orderId, {
         status: 'submitted'
         });
-        // logger.info({ orderId }, 'Broadcasted submitted status');
+        logger.info({ orderId }, 'Broadcasted submitted status');
 
         
         const result = await router.executeSwap(

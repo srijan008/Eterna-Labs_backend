@@ -1,17 +1,20 @@
 import WebSocket from 'ws';
-import { buildServerExport } from '../server.ts';
+import { buildServer } from '../server.ts';
 import { afterAll, beforeAll, test, expect } from 'vitest';
 
 let server;
 
 beforeAll(async () => {
-  server = await buildServerExport();
+  server = await buildServer();
   await server.listen({ port: 0 });
 });
 
 afterAll(async () => {
-  await server.close();
+  if (server) {
+    await server.close();
+  }
 });
+
 
 test('ws rejects connection without orderId', async () => {
   await new Promise((resolve) => {

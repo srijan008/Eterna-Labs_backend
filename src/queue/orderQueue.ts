@@ -22,7 +22,16 @@ export async function initOrderQueue() {
 }
 
 export async function enqueueOrder(orderId: string) {
-  // console.log('ENQUEUE ORDER CALLED', orderId);
-  await orderQueue.add('execute-order', { orderId });
+  const job = await orderQueue.add(
+    'execute-order',
+    { orderId },
+    {
+      attempts: 3,
+      backoff: { type: 'exponential', delay: 500 }
+    }
+  );
+
   console.log('Order enqueued:', orderId);
+  return job;
 }
+
